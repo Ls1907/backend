@@ -64,6 +64,7 @@ userSchema.pre("save", async function (next) { // hook to encrypt password befor
 
 userSchema.methods.isPasswordCorrect = async function (password) {
   return await bcrypt.compare(password, this.password);
+  next();
 };
 
 userSchema.methods.generateAccessToken = function () {
