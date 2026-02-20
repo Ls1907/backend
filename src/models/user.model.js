@@ -59,7 +59,7 @@ const userSchema = new Schema(
 
 userSchema.pre("save", async function (next) { // hook to encrypt password before saving in database..
   if (!this.ismodified("password")) return next();
-  this.password = bcrypt.hash(this.password, 10);
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
