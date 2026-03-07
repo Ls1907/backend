@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import jsonwebtoken from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema(
@@ -57,8 +57,8 @@ const userSchema = new Schema(
   }
 );
 
-userSchema.pre("save", async function (next) { // hook to encrypt password before saving in database..
-  if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () { // hook to encrypt password before saving in database..
+  if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 10);
 });
 
@@ -88,9 +88,9 @@ userSchema.methods.generateRefreshToken = function(){
         _id: this._id,
        
       },
-      process.env.ACCESS_TOKEN_SECRET,
+      process.env.REFRESH_TOKEN_SECRET,
       {
-        expiresIn: process.env.ACCESS_TOKEN_EXPIRY, // expiry goes in an object..
+        expiresIn: process.env.REFRESH_TOKEN_EXPIRY, // expiry goes in an object..
       }
     );
 }
